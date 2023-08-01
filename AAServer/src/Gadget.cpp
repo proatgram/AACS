@@ -10,14 +10,31 @@
 using namespace std;
 
 Gadget::Gadget(const Library &lib, int vid, int pid, const string &name) {
-  checkUsbgError(usbg_create_gadget_vid_pid(lib.getState(), name.c_str(), vid,
-                                            pid, &gadget));
+  int usbg_ret = usbg_create_gadget_vid_pid(lib.getState(), name.c_str(), vid,
+                                            pid, &gadget);
+  if (usbg_ret != USBG_SUCCESS) {
+    if(usbg_get_gadget_udc(gadget)) {
+      int usbg_ret_ = usbg_disable_gadget(gadget);
+      if (usbg_ret_ != USBG_SUCCESS) {
+        cerr << usbg_strerror(static_cast<usbg_error>(usbg_ret_)) << endl;
+      }
+    }
+    int returnValue = usbg_rm_gadget(gadget, USBG_RM_RECURSE);
+    if (returnValue != USBG_SUCCESS)
+      cerr << usbg_strerror(static_cast<usbg_error>(returnValue)) << endl;
+    throw runtime_error(string("Libusbg erorr: ") + usbg_strerror(static_cast<usbg_error>(usbg_ret)));
+  }
 }
 
 Gadget::~Gadget() {
-  auto returnValue = usbg_rm_gadget(gadget, USBG_RM_RECURSE);
+  // Disable gadget if it is enabled
+  if(usbg_get_gadget_udc(gadget)) {
+    int usbg_ret = 0;
+    checkUsbgError(usbg_disable_gadget(gadget));
+  }
+  int returnValue = usbg_rm_gadget(gadget, USBG_RM_RECURSE);
   if (returnValue != USBG_SUCCESS)
-    cout << usbg_strerror((usbg_error)returnValue) << endl;
+    cerr << usbg_strerror((usbg_error)returnValue) << endl;
 }
 
 void Gadget::setStrings(const string &manufacturer, const string &product,

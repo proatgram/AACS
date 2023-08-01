@@ -1,5 +1,7 @@
 // Distributed under GPLv3 only as specified in repository's root LICENSE file
 
+#include "config.h"
+
 #include "AaCommunicator.h"
 #include "Channel.pb.h"
 #include "ChannelOpenRequest.pb.h"
@@ -256,7 +258,7 @@ void AaCommunicator::handlePingRequest(const void *buf, size_t nbytes) {
 
   tag::aas::PingResponse presp;
   presp.set_timestamp(preq.timestamp());
-  int bufSize = presp.ByteSize();
+  size_t bufSize = presp.ByteSizeLong();
   uint8_t buffer[bufSize];
   if (!presp.SerializeToArray(buffer, bufSize))
     throw aa_runtime_error("presp.SerializeToArray failed");

@@ -7,7 +7,7 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
-//#include "backward.hpp"
+#include <backward.hpp>
 
 using namespace std;
 
@@ -20,8 +20,8 @@ ssize_t checkError(ssize_t ret, const std::vector<int> &ignoredErrors) {
              ignoredErrors.end()) {
     return 0;
   } else {
-    throw aa_runtime_error("checkError: " + to_string(ret) + " " +
-                           to_string(errno));
+    throw aa_runtime_error("checkError: " + to_string(ret) + ": What: " +
+                           std::strerror(errno));
   }
 }
 

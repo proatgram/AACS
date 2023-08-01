@@ -1,5 +1,6 @@
 // Distributed under GPLv3 only as specified in repository's root LICENSE file
 
+#include "config.h"
 #include "AaCommunicator.h"
 #include "Library.h"
 #include "Message.h"

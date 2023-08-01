@@ -11,10 +11,6 @@ pkg_check_modules (gst REQUIRED IMPORTED_TARGET gstreamer-base-1.0)
 pkg_check_modules (LIBUSBGX REQUIRED IMPORTED_TARGET libusbgx)
 pkg_check_modules (LIBPCAP REQUIRED IMPORTED_TARGET libpcap)
 
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
-include_directories(include)
-include_directories(${gst_INCLUDE_DIRS})
-
 add_executable(AAServer main.cpp 
     ../src/utils.cpp 
     src/ServerUtils.cpp 
@@ -38,6 +34,10 @@ add_executable(AAServer main.cpp
     src/InputChannelHandler.cpp
     ${BACKWARD_ENABLE}
 )
+
+target_include_directories(AAServer PRIVATE ${CMAKE_BINARY_DIR}/include)
+target_include_directories(AAServer PRIVATE include)
+target_include_directories(AAServer PRIVATE ${gst_INCLUDE_DIRS})
 
 add_backward(AAServer)
 target_link_libraries(AAServer Threads::Threads)

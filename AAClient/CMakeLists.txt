@@ -9,10 +9,6 @@ find_package(fmt REQUIRED)
 pkg_check_modules (libusb REQUIRED IMPORTED_TARGET libusb-1.0)
 pkg_check_modules (gst REQUIRED IMPORTED_TARGET gstreamer-base-1.0)
 
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
-include_directories(${libusb_INCLUDE_DIR} include)
-include_directories(${gst_INCLUDE_DIRS})
-
 add_executable(AAClient main.cpp 
     src/Library.cpp
     src/Device.cpp
@@ -24,7 +20,14 @@ add_executable(AAClient main.cpp
     src/VideoChannelHandler.cpp
     src/InputChannelHandler.cpp
     )
+
+target_include_directories(AAClient PRIVATE ${CMAKE_BINARY_DIR}/include)
+target_include_directories(AAClient PRIVATE include)
+target_include_directories(AAClient PRIVATE ${gst_INCLUDE_DIRS})
+target_include_directories(AAClient PRIVATE ${libusb_INCLUDE_DIR})
+
 add_backward(AAClient)
+
 target_link_libraries(AAClient Threads::Threads)
 target_link_libraries(AAClient PkgConfig::libusb)
 target_link_libraries(AAClient PkgConfig::gst)

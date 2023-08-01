@@ -1,0 +1,4 @@
+#cmakedefine _LARGEFILE_SOURCE
+#cmakedefine _LARGE_FILES
+#cmakedefine _FILE_OFFSET_BITS @_FILE_OFFSET_BITS@
+#cmakedefine OPJ_HAVE_FSEEKO @OPJ_HAVE_FSEEKO@

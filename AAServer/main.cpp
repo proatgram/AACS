@@ -1,5 +1,6 @@
 // Distributed under GPLv3 only as specified in repository's root LICENSE file
 
+#include "config.h"
 #include "AaCommunicator.h"
 #include "ChannelType.h"
 #include "Library.h"

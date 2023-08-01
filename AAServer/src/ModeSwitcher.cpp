@@ -1,5 +1,7 @@
 // Distributed under GPLv3 only as specified in repository's root LICENSE file
 
+#include "config.h"
+
 #include "ModeSwitcher.h"
 #include "Configuration.h"
 #include "FfsFunction.h"
@@ -65,7 +67,7 @@ void ModeSwitcher::handleSwitchToAccessoryMode(const Library &lib) {
   configuration.addFunction(ms_function, "massstorage_initial");
   configuration.addFunction(ffs_function, "loopback_initial");
 
-  auto fd = open((tmpMountpoint / "ep0").c_str(), O_RDWR);
+  auto fd = open((tmpMountpoint / "ep0").c_str(), O_RDWR | O_LARGEFILE);
   write_descriptors_default(fd);
 
   auto udc = Udc::getUdcById(lib, 0);
